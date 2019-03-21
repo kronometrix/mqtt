@@ -1,0 +1,20 @@
+worker_processes  1;
+error_log logs/error.log;
+
+events {
+    use kqueue;
+    worker_connections 1024;
+    multi_accept on;
+}
+
+stream {
+    lua_package_path ";;${prefix}../app/?.lua;";
+    lua_code_cache on;
+
+    init_by_lua_file "../app/init.lua";
+
+    server {
+        listen 5231;
+        content_by_lua_file ../app/main.lua;
+    }
+}

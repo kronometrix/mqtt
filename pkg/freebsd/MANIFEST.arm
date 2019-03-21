@@ -1,0 +1,16 @@
+name: "kmqtt"
+version: "1.0.0"
+origin: "sysutils/kmqtt"
+comment: "Kronometrix MQTT Databus"
+arch: "freebsd:10:arm"
+desc: "Kronometrix MQTT databus is a complete system, capable to receive, filter and convert native MQTT messages to Kronometrix HTTP data messages."
+maintainer: support@kronometrix.com
+www: https://www.kronometrix.com
+prefix: /opt/kronometrix
+users: [
+    "krmx"
+]
+groups: [
+    "krmx"
+]
+licenses: ["MIT"]
