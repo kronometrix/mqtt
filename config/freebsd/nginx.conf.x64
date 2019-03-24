@@ -11,10 +11,8 @@ stream {
     lua_package_path ";;${prefix}../app/?.lua;";
     lua_code_cache on;
 
-    init_by_lua_file "../app/init.lua";
+    resolver 8.8.8.8;
 
-    server {
-        listen 5231;
-        content_by_lua_file ../app/main.lua;
-    }
+    init_by_lua_file "../app/init.lua";
+    init_worker_by_lua_file "../app/main.lua";
 }
