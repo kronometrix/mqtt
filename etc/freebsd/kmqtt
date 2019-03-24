@@ -39,7 +39,7 @@ rcvar=kmqtt_enable
 
 load_rc_config ${name}
 
-command=/opt/kronometrix/mqtt/etc/kavmet
+command=/opt/kronometrix/mqtt/etc/kmqtt
 start_cmd="${name}_start"
 stop_cmd="${name}_stop"
 status_cmd="${name}_status"
