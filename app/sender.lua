@@ -1,5 +1,7 @@
 local http = require "resty.http.simple"
 local config = require "conf.config"
+local sha256 = require "resty.sha256"
+local str = require "resty.string"
 
 local log = ngx.log
 local concat = table.concat
@@ -21,8 +23,8 @@ local function urlencode(str)
     return str    
 end
 
-function _M.send_message(message, tid)
-    if type(message) ~= 'string' or #message == 0 or type(tid) ~= 'string' or tid == 0 then
+function _M.send_message(message, dsid_src_prefix)
+    if type(message) ~= 'string' or #message == 0 then
         return "Wrong parameters"
     end
     
@@ -31,11 +33,17 @@ function _M.send_message(message, tid)
     end
 
     for _, dest in ipairs(config.kronometrix) do
+        local dsid_sha256 = sha256:new()
+        dsid_sha256:update(table.concat{dsid_src_prefix, config.kronometrix.sid})
+        local dsid = str.to_hex(dsid_sha256:final())
+
+        log(INFO, "DSID: ", dsid)
+
         local res, err = http.request(dest.host, dest.port, {
             path = dest.path,
             method = "POST",
             headers = { 
-                ["token"] = tid,
+                ["token"] = dest.tid,
                 ["content-type"] = "application/x-www-form-urlencoded"
             },
             body = concat{"payload=", urlencode(message)}

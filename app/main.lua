@@ -11,8 +11,6 @@ local INFO = ngx.INFO
 
 local start_mqtt_client, run_timer
 
-local pattern = string.gsub(config.mqtt.topic, "%+", "%(%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%%x%)", 1)
-
 run_timer = function()
     local ok, err = timer_at(1, start_mqtt_client)
     if not ok then
@@ -27,11 +25,18 @@ start_mqtt_client = function(premature)
     if client:connect() then
         if client:subscribe{ topic = config.mqtt.topic } then
             client:on("message", function(msg)
-                local tid = string.match(msg.topic, pattern)
-                if not tid then
-                    log(WARN, "TID not found")
+                local client_id
+                if config.mqtt.client_id_source == 'topic' and type(config.mqtt.client_id_regexp) == 'string' then
+                    client_id = string.match(msg.topic, config.mqtt.client_id_regexp)
+                elseif config.mqtt.client_id_source == 'payload' then
+                    log(ERR, "Not yet implemented")
                 else
-                    local err = sender.send_message(msg.payload, tid)
+                    log(WARN, "Wrong configuration")
+                end
+                if client_id then
+                    log(INFO, "Client ID: ", client_id)
+
+                    local err = sender.send_message(msg.payload, table.concat{client_id, config.mqtt.server})
                     if err then
                         log(WARN, err)
                     end
