@@ -26,9 +26,9 @@ start_mqtt_client = function(premature)
         if client:subscribe{ topic = config.mqtt.topic } then
             client:on("message", function(msg)
                 local client_id
-                if config.mqtt.client_id_source == 'topic' and type(config.mqtt.client_id_regexp) == 'string' then
-                    client_id = string.match(msg.topic, config.mqtt.client_id_regexp)
-                elseif config.mqtt.client_id_source == 'payload' then
+                if config.mqtt.clientid_source == 'topic' and type(config.mqtt.clientid_regexp) == 'string' then
+                    client_id = string.match(msg.topic, config.mqtt.clientid_regexp)
+                elseif config.mqtt.clientid_source == 'payload' then
                     log(ERR, "Not yet implemented")
                 else
                     log(WARN, "Wrong configuration")

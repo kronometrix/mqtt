@@ -12,8 +12,8 @@ local kronometrix = {
 local mqtt = {
     server = "37.187.106.16",
     topic = "krmx/+/send_data",
-    client_id_source = "topic",
-    client_id_regexp = "krmx/(%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x)/send_data"
+    clientid_source = "topic",
+    clientid_regexp = "krmx/(%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x%x)/send_data"
 }
 
 return {
